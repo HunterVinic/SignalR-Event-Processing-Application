@@ -59,6 +59,18 @@ class _ChatPageState extends State<ChatPage> {
     _timer.cancel();
   }
 
+
+  void _updateEventStatus(int eventId, String status, String errorMessage, int retryCount) {
+    print("Sending :$eventId");
+    print("Sending: $status");
+    print("Sending: $errorMessage");
+    print("Sending: $retryCount");
+    print("Invoking UpdateEventStatus with arguments: UpdateEventStatus(${[eventId, status, errorMessage, retryCount]})");
+    connection.invoke("UpdateEventStatus", args: [eventId, status, errorMessage, retryCount]).catchError((error) {
+      print("Error updating event status: $error");
+    });
+  }
+
   Future<http.Response> pingWebsite(String url) async {
     try {
       return await http.get(Uri.parse(url));
@@ -276,16 +288,7 @@ class _ChatPageState extends State<ChatPage> {
     messageInputController.clear();
   }
 
-  void _updateEventStatus(int eventId, String status, String errorMessage, int retryCount) {
-    print("Sending :$eventId");
-    print("Sending: $status");
-    print("Sending: $errorMessage");
-    print("Sending: $retryCount");
-    print("Invoking UpdateEventStatus with arguments: UpdateEventStatus(${[eventId, status, errorMessage, retryCount]})");
-    connection.invoke("UpdateEventStatus", args: [eventId, status, errorMessage, retryCount]).catchError((error) {
-      print("Error updating event status: $error");
-    });
-  }
+
 
   late Stream<int> timerStream;
   late StreamController<int> streamController;
